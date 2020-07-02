@@ -1,11 +1,10 @@
 import json
 import xml.etree.ElementTree as ET
 
-
 def input_file_name():
-        file_name = input('Введите имя файла:\n')
-        return file_name
-  
+    file_name = input('Введите имя файла:\n')
+    return file_name
+
 def file_load():
     input_file_type = input("Выберите формат обрабатываемого файла:"
                         "Обработать json-файл - нажмите 'j',"
@@ -17,7 +16,8 @@ def file_load():
             news_list = data["rss"]["channel"]["items"]
             description_word_list = []
             for description in news_list:
-                    description_word_list.extend(description["description"].split(" "))
+                description_word_list.extend(description["description"]
+                                             .split(" "))
         return description_word_list
     
     elif input_file_type == 'x':
@@ -29,52 +29,36 @@ def file_load():
         for news in news_list:
             text_list.extend(news.text.split(" ")) 
         return text_list
-        
 
-####def convet_text_to_list(): 
-      
+def final_list_output():
+    word_len = int(input
+    ('Введите минимальную длину слов в итоговом списке\n'))
+    final_list_lenght = int(input
+    ('Введите количество слов в итоговом списке в итоговом списке\n'))
     
-        
-    
-
-
-def word_sort():
-    word_len = int(input('Введите минимальную длину слов в итоговом списке\n'))
-    final_list_lenght = int(input('Введите количество слов в итговом списке в итоговом списке\n'))
     dict_of_lenght = {0:[]}                 
     for element in file_load():
         if len(element) in dict_of_lenght.keys():
             dict_of_lenght[len(element)].append(element)
         else:
             dict_of_lenght.update({len(element):[element]})
+            
     for key in range(word_len):                
         del dict_of_lenght[key]
-
-    print(f'{final_list_lenght} самых часто встречающихся в новостях слов длиннее {word_len-1} символов:')
-    return dict_of_lenght
-
-
-
-def values_extract():
+        
     word_list_more_than = []                
-    for value in word_sort().values():
+    for value in dict_of_lenght.values():
         word_list_more_than.extend(value)            
-    word_list_more_than_lower = list((word_list_more_than.count(i), i.lower()) for i in word_list_more_than)
+    word_list_more_than_lower = list((word_list_more_than.count(i), i.lower())
+                                     for i in word_list_more_than)
     j = sorted(list(set(word_list_more_than_lower)),
-        key=lambda x: (x[0], [-ord(c) for c in x[1]]), reverse = True)    
-    for m in range(10):
-        print(j[m])
+        key=lambda x: (x[0], [-ord(c) for c in x[1]]), reverse = True)
+    
+    print(f'{final_list_lenght} самых часто встречающихся'
+          f'в новостях слов длиннее {word_len-1} символов:')
+    for element in range(final_list_lenght):
+        print(j[element])
     return
 
     
-values_extract()
-
-
-
-
-
-
-
-    
-
-    
+final_list_output()
